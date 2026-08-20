@@ -264,9 +264,46 @@
   .cabin-row{display:flex;gap:5vw;align-items:center;padding:3.6rem 0;border-bottom:1px solid var(--line);}
   .cabin-row:first-of-type{padding-top:0;}
   .cabin-row:nth-child(even){flex-direction:row-reverse;}
-  .cabin-media{flex:1.1;aspect-ratio:5/4;overflow:hidden;}
+/* CABIN PHOTO HOVER OVERLAY */
+  .cabin-media{flex:1.1;aspect-ratio:5/4;overflow:hidden;cursor:pointer;position:relative;}
   .cabin-media img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s ease;}
   .cabin-row:hover .cabin-media img{transform:scale(1.04);}
+  .cabin-photo-overlay{position:absolute;inset:0;background:rgba(21,20,15,0);display:flex;align-items:flex-end;padding:1.2rem;transition:background 0.35s ease;z-index:2;pointer-events:none;}
+  .cabin-media:hover .cabin-photo-overlay{background:rgba(21,20,15,0.42);}
+  .cabin-photo-cta{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:#FAFAF6;border:1px solid rgba(250,250,246,0.65);padding:0.45rem 0.9rem;opacity:0;transform:translateY(8px);transition:opacity 0.35s ease,transform 0.35s ease;}
+  .cabin-media:hover .cabin-photo-cta{opacity:1;transform:translateY(0);}
+
+  /* CABIN GALLERY MODAL */
+  .cabin-modal{position:fixed;inset:0;background:rgba(12,11,8,0.97);z-index:600;display:none;flex-direction:column;}
+  .cabin-modal.active{display:flex;}
+  .cabin-modal-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.6rem;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+  .cabin-modal-name{font-family:'Fraunces',serif;font-size:1.05rem;color:#F3F1E9;font-style:italic;font-weight:300;}
+  .cabin-modal-controls{display:flex;align-items:center;gap:1rem;}
+  .cabin-modal-counter{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:#9C9384;letter-spacing:0.06em;}
+  .cabin-modal-btn{background:none;border:none;color:#C9C3B1;cursor:pointer;font-size:1rem;padding:0.3rem 0.4rem;line-height:1;transition:color 0.2s ease;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;}
+  .cabin-modal-btn:hover{color:#F3F1E9;}
+  .cabin-modal-stage{flex:1;display:flex;align-items:center;position:relative;min-height:0;overflow:hidden;}
+  .cabin-modal-viewport{flex:1;height:100%;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .cabin-img{position:absolute;max-width:calc(100% - 120px);max-height:100%;width:auto;height:auto;object-fit:contain;transition:opacity 0.38s ease,transform 0.38s ease;user-select:none;}
+  .cabin-img.cabin-active{opacity:1;transform:translateX(0);}
+  .cabin-img:not(.cabin-active){opacity:0;transform:translateX(60px);}
+  .cabin-img.exit-left{opacity:0!important;transform:translateX(-70px)!important;}
+  .cabin-img.exit-right{opacity:0!important;transform:translateX(70px)!important;}
+  .cabin-img.from-right{opacity:0;transform:translateX(70px);transition:none!important;}
+  .cabin-img.from-left{opacity:0;transform:translateX(-70px);transition:none!important;}
+  .cabin-modal-arrow{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:#9C9384;font-size:2.4rem;cursor:pointer;padding:1rem 1.1rem;z-index:5;transition:color 0.2s ease;line-height:1;}
+  .cabin-modal-arrow:hover{color:#F3F1E9;}
+  .cabin-modal-prev{left:0;}
+  .cabin-modal-next{right:0;}
+  .cabin-modal-thumbs{display:flex;gap:0.5rem;padding:0.75rem 1.6rem;overflow-x:auto;flex-shrink:0;background:rgba(0,0,0,0.35);scrollbar-width:thin;scrollbar-color:#5A5447 transparent;}
+  .cabin-thumb{width:64px;height:64px;flex-shrink:0;object-fit:cover;cursor:pointer;opacity:0.4;border:2px solid transparent;transition:opacity 0.22s ease,border-color 0.22s ease;}
+  .cabin-thumb.active{opacity:1;border-color:#E0B65C;}
+  .cabin-thumb:hover{opacity:0.75;}
+  @media(max-width:600px){
+    .cabin-img{max-width:100%;}
+    .cabin-modal-arrow{padding:0.6rem 0.7rem;font-size:1.8rem;}
+    .cabin-thumb{width:50px;height:50px;}
+  }
   .cabin-copy{flex:1;}
   .eyebrow-mini{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--stone);text-transform:uppercase;margin-bottom:0.9rem;display:block;}
   .cabin-copy h3{font-size:clamp(1.6rem,2.6vw,2.1rem);margin-bottom:1.2rem;}
@@ -467,7 +504,7 @@
     </div>
 
     <div class="cabin-row reveal">
-      <div class="cabin-media"><img src="https://static.wixstatic.com/media/f5f2b7_6d04637f7f40451e9a95f7a95689a408~mv2.jpg" alt="Redrock Cabin rental at 22 Eleven Resort, Devine TX"></div>
+      <div class="cabin-media" onclick="openCabinGallery('redrock')" role="button" tabindex="0" aria-label="View Redrock Cabin photos"><img src="https://static.wixstatic.com/media/f5f2b7_6d04637f7f40451e9a95f7a95689a408~mv2.jpg" alt="Redrock Cabin rental at 22 Eleven Resort, Devine TX"><div class="cabin-photo-overlay"><span class="cabin-photo-cta" data-en="View photos" data-es="Ver fotos">View photos</span></div></div>
       <div class="cabin-copy">
         <span class="eyebrow-mini">01 — Redrock</span>
         <h3 data-en="The Redrock Cabin" data-es="La Cabaña Redrock">The Redrock Cabin</h3>
@@ -484,7 +521,7 @@
     </div>
 
     <div class="cabin-row reveal">
-      <div class="cabin-media"><img src="https://static.wixstatic.com/media/f5f2b7_c189692e3000433b9428d89c21191120~mv2.jpg" alt="Sedona Cabin rental at 22 Eleven Resort, Devine TX"></div>
+      <div class="cabin-media" onclick="openCabinGallery('sedona')" role="button" tabindex="0" aria-label="View Sedona Cabin photos"><img src="https://static.wixstatic.com/media/f5f2b7_c189692e3000433b9428d89c21191120~mv2.jpg" alt="Sedona Cabin rental at 22 Eleven Resort, Devine TX"><div class="cabin-photo-overlay"><span class="cabin-photo-cta" data-en="View photos" data-es="Ver fotos">View photos</span></div></div>
       <div class="cabin-copy">
         <span class="eyebrow-mini">02 — Sedona</span>
         <h3 data-en="The Sedona Cabin" data-es="La Cabaña Sedona">The Sedona Cabin</h3>
@@ -501,7 +538,7 @@
     </div>
 
     <div class="cabin-row reveal">
-      <div class="cabin-media"><img src="https://static.wixstatic.com/media/f5f2b7_bde6b6cd956a4427a3918770426b89b8~mv2.jpg" alt="Mesquite Cabin rental at 22 Eleven Resort, Devine TX"></div>
+      <div class="cabin-media" onclick="openCabinGallery('mesquite')" role="button" tabindex="0" aria-label="View Mesquite Cabin photos"><img src="https://static.wixstatic.com/media/f5f2b7_bde6b6cd956a4427a3918770426b89b8~mv2.jpg" alt="Mesquite Cabin rental at 22 Eleven Resort, Devine TX"><div class="cabin-photo-overlay"><span class="cabin-photo-cta" data-en="View photos" data-es="Ver fotos">View photos</span></div></div>
       <div class="cabin-copy">
         <span class="eyebrow-mini">03 — Mesquite</span>
         <h3 data-en="The Mesquite Cabin" data-es="La Cabaña Mesquite">The Mesquite Cabin</h3>
@@ -518,7 +555,7 @@
     </div>
 
     <div class="cabin-row reveal">
-      <div class="cabin-media"><img src="https://static.wixstatic.com/media/f5f2b7_7700b5d807224ae486410de02004d555~mv2.jpg" alt="Claystone Cabin rental at 22 Eleven Resort, Devine TX"></div>
+      <div class="cabin-media" onclick="openCabinGallery('claystone')" role="button" tabindex="0" aria-label="View Claystone Cabin photos"><img src="https://static.wixstatic.com/media/f5f2b7_7700b5d807224ae486410de02004d555~mv2.jpg" alt="Claystone Cabin rental at 22 Eleven Resort, Devine TX"><div class="cabin-photo-overlay"><span class="cabin-photo-cta" data-en="View photos" data-es="Ver fotos">View photos</span></div></div>
       <div class="cabin-copy">
         <span class="eyebrow-mini">04 — Claystone</span>
         <h3 data-en="The Claystone Cabin" data-es="La Cabaña Claystone">The Claystone Cabin</h3>
@@ -956,6 +993,146 @@
   }
   setInterval(() => goTo((active + 1) % cards.length), 6000);
 
+
+  // ===== CABIN GALLERIES =====
+  // Add or edit photos per cabin here.
+  // src can be a local path (assets/gallery/img_xxxx.jpg) or a full URL.
+  const cabinGalleries = {
+    redrock: {
+      name: 'The Redrock Cabin',
+      photos: [
+        { src: 'https://static.wixstatic.com/media/f5f2b7_6d04637f7f40451e9a95f7a95689a408~mv2.jpg', caption: 'Cabin exterior' },
+        { src: 'assets/gallery/img_2453.jpg', caption: 'Living room & kitchen' },
+        { src: 'assets/gallery/img_2454.jpg', caption: 'Living room' },
+        { src: 'assets/gallery/img_2464.jpg', caption: 'Master bedroom' },
+        { src: 'assets/gallery/img_2465.jpg', caption: 'Bathroom' },
+        { src: 'assets/gallery/img_2316.jpg', caption: 'Pergola at night' },
+      ]
+    },
+    sedona: {
+      name: 'The Sedona Cabin',
+      photos: [
+        { src: 'https://static.wixstatic.com/media/f5f2b7_c189692e3000433b9428d89c21191120~mv2.jpg', caption: 'Cabin exterior' },
+        { src: 'assets/gallery/img_2455.jpg', caption: 'Kitchen & dining area' },
+        { src: 'assets/gallery/img_2470.jpg', caption: 'Second bedroom' },
+        { src: 'assets/gallery/img_2322.jpg', caption: 'Pergola at night' },
+        { src: 'assets/gallery/img_2323.jpg', caption: 'Pergola string lights' },
+      ]
+    },
+    mesquite: {
+      name: 'The Mesquite Cabin',
+      photos: [
+        { src: 'https://static.wixstatic.com/media/f5f2b7_bde6b6cd956a4427a3918770426b89b8~mv2.jpg', caption: 'Cabin exterior' },
+        { src: 'assets/gallery/img_2812.jpg', caption: 'Living room & kitchen' },
+        { src: 'assets/gallery/img_2824.jpg', caption: 'Living room with TV' },
+        { src: 'assets/gallery/img_2815.jpg', caption: 'Second bedroom' },
+        { src: 'assets/gallery/img_2828.jpg', caption: 'Pergola & outdoor area' },
+      ]
+    },
+    claystone: {
+      name: 'The Claystone Cabin',
+      photos: [
+        { src: 'https://static.wixstatic.com/media/f5f2b7_7700b5d807224ae486410de02004d555~mv2.jpg', caption: 'Cabin exterior' },
+        { src: 'assets/gallery/img_2814.jpg', caption: 'Kitchen detail' },
+        { src: 'assets/gallery/img_2324.jpg', caption: 'Outdoor seating area' },
+      ]
+    }
+  };
+
+  let _cabin = null, _ci = 0, _touchX = 0;
+
+  function openCabinGallery(cabin) {
+    _cabin = cabin; _ci = 0;
+    const g = cabinGalleries[cabin];
+    document.getElementById('cabinModalName').textContent = g.name;
+    // Reset slots
+    const a = document.getElementById('cabinImgA');
+    const b = document.getElementById('cabinImgB');
+    a.src = g.photos[0].src; a.alt = g.photos[0].caption;
+    a.className = 'cabin-img cabin-active';
+    b.src = ''; b.className = 'cabin-img';
+    // Build thumbs
+    const tc = document.getElementById('cabinThumbs');
+    tc.innerHTML = '';
+    g.photos.forEach((p, i) => {
+      const img = document.createElement('img');
+      img.src = p.src; img.alt = p.caption;
+      img.className = 'cabin-thumb' + (i === 0 ? ' active' : '');
+      img.onclick = () => cabinGoTo(i);
+      tc.appendChild(img);
+    });
+    _cabinCounter();
+    document.getElementById('cabinModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCabinModal() {
+    document.getElementById('cabinModal').classList.remove('active');
+    document.body.style.overflow = '';
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  }
+
+  function cabinNav(dir) {
+    const len = cabinGalleries[_cabin].photos.length;
+    cabinGoTo((_ci + dir + len) % len, dir > 0 ? 'next' : 'prev');
+  }
+
+  function cabinGoTo(ni, dir) {
+    if (ni === _ci) return;
+    if (!dir) dir = ni > _ci ? 'next' : 'prev';
+    const photos = cabinGalleries[_cabin].photos;
+    const a = document.getElementById('cabinImgA');
+    const b = document.getElementById('cabinImgB');
+    const activeEl = a.classList.contains('cabin-active') ? a : b;
+    const waitEl = activeEl === a ? b : a;
+
+    const enterClass = dir === 'next' ? 'from-right' : 'from-left';
+    const exitClass  = dir === 'next' ? 'exit-left'  : 'exit-right';
+
+    waitEl.src = photos[ni].src; waitEl.alt = photos[ni].caption;
+    waitEl.className = 'cabin-img ' + enterClass;
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      activeEl.className = 'cabin-img ' + exitClass;
+      waitEl.className   = 'cabin-img cabin-active';
+    }));
+
+    setTimeout(() => { activeEl.className = 'cabin-img'; activeEl.src = ''; }, 420);
+    _ci = ni;
+    _cabinCounter();
+    // Update thumbs
+    document.querySelectorAll('.cabin-thumb').forEach((t, i) => t.classList.toggle('active', i === _ci));
+    const at = document.querySelector('.cabin-thumb.active');
+    if (at) at.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  }
+
+  function _cabinCounter() {
+    const len = cabinGalleries[_cabin].photos.length;
+    document.getElementById('cabinModalCounter').textContent = (_ci + 1) + ' / ' + len;
+  }
+
+  function cabinFullscreen() {
+    const el = document.getElementById('cabinModal');
+    if (!document.fullscreenElement) { (el.requestFullscreen || el.webkitRequestFullscreen)?.call(el); }
+    else { (document.exitFullscreen || document.webkitExitFullscreen)?.call(document); }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('cabinModal').classList.contains('active')) return;
+    if (e.key === 'Escape') closeCabinModal();
+    if (e.key === 'ArrowRight') cabinNav(1);
+    if (e.key === 'ArrowLeft')  cabinNav(-1);
+  });
+
+  const _vp = document.getElementById('cabinViewport');
+  if (_vp) {
+    _vp.addEventListener('touchstart', (e) => { _touchX = e.touches[0].clientX; }, { passive:true });
+    _vp.addEventListener('touchend', (e) => {
+      const diff = _touchX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 44) cabinNav(diff > 0 ? 1 : -1);
+    });
+  }
+
   // Language toggle (EN default, ES translation)
   function applyLang(lang){
     document.querySelectorAll('[data-en]').forEach(el => { el.textContent = el.dataset[lang]; });
@@ -1032,6 +1209,26 @@
   window.navLightbox = navLightbox;
 
 </script>
+<!-- CABIN GALLERY MODAL -->
+<div id="cabinModal" class="cabin-modal" role="dialog" aria-modal="true">
+  <div class="cabin-modal-header">
+    <span class="cabin-modal-name" id="cabinModalName"></span>
+    <div class="cabin-modal-controls">
+      <span class="cabin-modal-counter" id="cabinModalCounter"></span>
+      <button class="cabin-modal-btn" onclick="cabinFullscreen()" title="Fullscreen">&#10138;</button>
+      <button class="cabin-modal-btn" onclick="closeCabinModal()">CLOSE ✕</button>
+    </div>
+  </div>
+  <div class="cabin-modal-stage">
+    <button class="cabin-modal-arrow cabin-modal-prev" onclick="cabinNav(-1)" aria-label="Previous photo">‹</button>
+    <div class="cabin-modal-viewport" id="cabinViewport">
+      <img id="cabinImgA" class="cabin-img cabin-active" alt="">
+      <img id="cabinImgB" class="cabin-img" alt="">
+    </div>
+    <button class="cabin-modal-arrow cabin-modal-next" onclick="cabinNav(1)" aria-label="Next photo">›</button>
+  </div>
+  <div class="cabin-modal-thumbs" id="cabinThumbs"></div>
+</div>
 <script type="module">
   // ===== Firebase configuration =====
   // 1. Go to https://console.firebase.google.com -> Create a project
